@@ -34,10 +34,18 @@ def render_nginx_conf():
         with open("/etc/nginx/sites-available/gluu_https.conf", "w") as fd:
             rendered_txt = txt % {
                 "gluu_domain": consul.kv.get("hostname", "localhost"),
-                "gluu_oxauth_backend": GLUU_OXAUTH_BACKEND,
-                "gluu_oxtrust_backend": GLUU_OXTRUST_BACKEND,
+                "gluu_oxauth_backend": upstream_config(GLUU_OXAUTH_BACKEND.split(",")),
+                "gluu_oxtrust_backend": upstream_config(GLUU_OXTRUST_BACKEND.split(",")),
             }
             fd.write(rendered_txt)
+
+
+def upstream_config(backends):
+    cfg = "".join([
+        "\tserver {} fail_timeout=10s;\n".format(backend)
+        for backend in backends
+    ])
+    return cfg
 
 
 if __name__ == "__main__":

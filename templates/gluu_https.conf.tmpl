@@ -1,11 +1,11 @@
 server_tokens off;
 
 upstream oxauth_backend {
-    server %(gluu_oxauth_backend)s fail_timeout=10s;
+%(gluu_oxauth_backend)s
 }
 
 upstream oxtrust_backend {
-    server %(gluu_oxtrust_backend)s fail_timeout=10s;
+%(gluu_oxtrust_backend)s
 }
 
 server {
