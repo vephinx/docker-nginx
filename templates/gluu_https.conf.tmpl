@@ -38,7 +38,7 @@ server {
     }
 
     location /oxauth {
-        proxy_pass http://%(gluu_oxauth_backend)s;
+        proxy_pass http://oxauth_backend;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Host $host:$server_port;
