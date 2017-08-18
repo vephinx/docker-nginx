@@ -27,7 +27,7 @@ server {
     server_name %(gluu_domain)s;
 
     # security headers
-    add_header X-Frame-Options SAMEORIGIN always;
+    #add_header X-Frame-Options SAMEORIGIN always;
     add_header X-Xss-Protection "1; mode=block" always;
     add_header X-Content-Type-Options nosniff always;
     # add_header Content-Security-Policy "default-src 'self' 'unsafe-inline' %(gluu_domain)s" always;
@@ -37,7 +37,7 @@ server {
         return 302 /oxauth;
     }
 
-    location /oxauth {
+    location ~ ^/oxauth {
         proxy_pass http://oxauth_backend;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -45,6 +45,11 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_redirect off;
+
+        add_header Access-Control-Allow-Origin "*";
+        add_header Access-Control-Allow-Methods GET,POST,HEAD,OPTIONS;
+        add_header Access-Control-Allow-Headers Origin,Authorization,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers;
+        add_header Access-Control-Allow-Credentials true;
     }
 
     location /.well-known/openid-configuration {
