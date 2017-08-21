@@ -2,6 +2,18 @@
 
 Here you can see an overview of changes between each release.
 
+## Version 3.0.1_rev1.0.0-beta4
+
+Released on August 21st, 2017.
+
+* Added missing CORS headers. Reference: https://github.com/GluuFederation/docker-nginx/issues/1.
+
+## Version 3.0.1_rev1.0.0-beta3
+
+Released on August 16th, 2017.
+
+* Fixed server directive to avoid redirect loop on port 80.
+
 ## Version 3.0.1_rev1.0.0-beta2
 
 Released on August 14th, 2017.
