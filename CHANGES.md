@@ -2,6 +2,12 @@
 
 Here you can see an overview of changes between each release.
 
+## Version 3.0.1_rev1.0.0-beta5
+
+Released on August 25th, 2017.
+
+* Fixed duplicated CORS headers that were already set by oxAuth upstream.
+
 ## Version 3.0.1_rev1.0.0-beta4
 
 Released on August 21st, 2017.
