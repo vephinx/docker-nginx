@@ -2,6 +2,10 @@
 
 A docker image version of nginx.
 
+## Latest Stable Release
+
+Latest stable release is `gluufederation/nginx:3.0.1_rev1.0.0-beta5`. See `CHANGES.md` for archives.
+
 ## Versioning/Tagging
 
 This image uses its own versioning/tagging format.
