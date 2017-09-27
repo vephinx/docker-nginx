@@ -2,6 +2,10 @@
 
 A docker image version of nginx.
 
+## Latest Stable Release
+
+Latest stable release is `gluufederation/nginx:3.0.1_rev1.0.0-beta5`. See `CHANGES.md` for archives.
+
 ## Versioning/Tagging
 
 This image uses its own versioning/tagging format.
@@ -27,6 +31,13 @@ Or get it from Docker Hub:
 ```
 docker pull gluufederation/nginx:latest
 ```
+
+## Environment Variables
+
+- `GLUU_KV_HOST`: hostname or IP address of Consul.
+- `GLUU_KV_PORT`: port of Consul.
+- `GLUU_OXAUTH_BACKEND`: Host and port of oxAuth backend, i.e. `oxauth.domain.com:8081`. Multiple backends is supported (separate each backend with comma character, i.e. `oxauth1.domain.com:8081,oxauth2.domain.com:8081`).
+- `GLUU_OXTRUST_BACKEND`: Host and port of oxTrust backend, i.e. `oxtrust.domain.com:8082`. Multiple backends is supported (separate each backend with comma character, i.e. `oxtrust1.domain.com:8082,oxtrust2.domain.com:8082`).
 
 ## Running The Container
 
