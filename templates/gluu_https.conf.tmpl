@@ -57,8 +57,8 @@ server {
         proxy_redirect off;
     }
 
-    location /oxauth/restv1/oxauth/jwks {
-        proxy_pass http://oxauth_backend/oxauth/restv1/oxauth/jwks;
+    location /oxauth/restv1/jwks {
+        proxy_pass http://oxauth_backend/oxauth/restv1/jwks;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Host $host:$server_port;
@@ -73,8 +73,8 @@ server {
         add_header Access-Control-Allow-Credentials true;
     }
 
-    location /oxauth/restv1/oxauth/userinfo {
-        proxy_pass http://oxauth_backend/oxauth/restv1/oxauth/userinfo;
+    location /oxauth/restv1/userinfo {
+        proxy_pass http://oxauth_backend/oxauth/restv1/userinfo;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Host $host:$server_port;
