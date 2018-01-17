@@ -34,7 +34,7 @@ server {
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
 
     location / {
-        return 302 /oxauth;
+        return 302 /identity;
     }
 
     location /oxauth {
@@ -56,40 +56,6 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_redirect off;
     }
-
-    #location /oxauth/restv1/jwks {
-    #    proxy_pass http://oxauth_backend/oxauth/restv1/jwks;
-    #    proxy_set_header Host $host;
-    #    proxy_set_header X-Real-IP $remote_addr;
-    #    proxy_set_header X-Forwarded-Host $host:$server_port;
-    #    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    #    proxy_set_header X-Forwarded-Proto $scheme;
-    #    proxy_redirect off;
-    #
-    #    # oxAuth does not set CORS filters here, hence we tell nginx to add the headers
-    #    add_header Access-Control-Allow-Origin "*";
-    #    add_header Access-Control-Allow-Methods GET,POST,HEAD,OPTIONS;
-    #    add_header Access-Control-Allow-Headers Origin,Authorization,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers;
-    #    add_header Access-Control-Allow-Credentials true;
-    #}
-
-    #location /oxauth/restv1/userinfo {
-    #    proxy_pass http://oxauth_backend/oxauth/restv1/userinfo;
-    #    proxy_set_header Host $host;
-    #    proxy_set_header X-Real-IP $remote_addr;
-    #    proxy_set_header X-Forwarded-Host $host:$server_port;
-    #    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    #    proxy_set_header X-Forwarded-Proto $scheme;
-    #    proxy_redirect off;
-    #
-    #    # oxAuth does not set CORS filters here, hence we tell nginx to add the headers
-    #    if ($request_method = "OPTIONS") {
-    #        add_header Access-Control-Allow-Origin "*";
-    #        add_header Access-Control-Allow-Methods GET,POST,HEAD,OPTIONS;
-    #        add_header Access-Control-Allow-Headers Origin,Authorization,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers;
-    #        add_header Access-Control-Allow-Credentials true;
-    #    }
-    #}
 
     location /.well-known/simple-web-discovery {
         proxy_pass http://oxauth_backend/oxauth/.well-known/simple-web-discovery;
