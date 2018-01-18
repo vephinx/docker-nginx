@@ -111,7 +111,7 @@ server {
         proxy_redirect off;
     }
 
-    location /.well-known/uma-configuration {
+    location /.well-known/uma2-configuration {
         proxy_pass http://oxauth_backend/oxauth/restv1/uma2-configuration;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
