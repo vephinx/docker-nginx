@@ -34,7 +34,7 @@ server {
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
 
     location / {
-        return 302 /oxauth;
+        return 302 /identity;
     }
 
     location /oxauth {
