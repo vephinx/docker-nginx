@@ -2,11 +2,7 @@
 set -e
 
 enable_gluu_https() {
-    if [ -f /etc/nginx/sites-available/gluu_https.conf ]; then
-        ln -sf /etc/nginx/sites-available/gluu_https.conf /etc/nginx/sites-enabled/gluu_https.conf
-        rm /etc/nginx/sites-enabled/default
-    fi
-
+    mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.orig
 }
 
 if [ ! -f /touched ]; then
@@ -15,4 +11,4 @@ if [ ! -f /touched ]; then
     enable_gluu_https
 fi
 
-exec gosu root /usr/sbin/nginx -g "daemon off;"
+exec /usr/sbin/nginx -g "daemon off;"

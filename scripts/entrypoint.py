@@ -31,7 +31,7 @@ def render_nginx_conf():
         txt = fd.read()
 
     if txt:
-        with open("/etc/nginx/sites-available/gluu_https.conf", "w") as fd:
+        with open("/etc/nginx/conf.d/gluu_https.conf", "w") as fd:
             rendered_txt = txt % {
                 "gluu_domain": consul.kv.get("hostname", "localhost"),
                 "gluu_oxauth_backend": upstream_config(GLUU_OXAUTH_BACKEND.split(",")),
