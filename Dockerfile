@@ -7,8 +7,8 @@ LABEL maintainer="Gluu Inc. <support@gluu.org>"
 # ===============
 RUN apk update && apk add --no-cache \
     openssl \
-    py-pip \
-    bash
+    py-pip
+
 
 # =====
 # nginx
@@ -23,8 +23,8 @@ EXPOSE 443
 # ======
 # Python
 # ======
-RUN pip install -U pip
-RUN pip install "consulate==0.6.0"
+RUN pip install -U pip \
+    && pip install "consulate==0.6.0"
 
 # ==========
 # misc stuff
