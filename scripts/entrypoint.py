@@ -8,6 +8,11 @@ GLUU_OXTRUST_BACKEND = os.environ.get("GLUU_OXTRUST_BACKEND", "localhost:8082")
 GLUU_KV_HOST = os.environ.get("GLUU_KV_HOST", "localhost")
 GLUU_KV_PORT = os.environ.get("GLUU_KV_PORT", 8500)
 
+GLUU_OX_PROXY_MODE = os.environ.get("GLUU_OX_PROXY_MODE", False)
+GLUU_OXAUTH_HOST_HEADER = os.environ.get("GLUU_OXAUTH_HOST_HEADER", "$host")
+GLUU_OXTRUST_HOST_HEADER = os.environ.get("GLUU_OXTRUST_HOST_HEADER", "$host")
+GLUU_RESOLVER_ADDR = os.environ.get("GLUU_RESOLVER_ADDR", "127.0.0.11")
+
 consul = consulate.Consul(host=GLUU_KV_HOST, port=GLUU_KV_PORT)
 
 
@@ -42,19 +47,39 @@ def render_ssl_key():
             fd.write(ssl_key)
 
 
-def render_nginx_conf():
-    txt = ""
-    with open("/opt/templates/gluu_https.conf.tmpl") as fd:
-        txt = fd.read()
+def as_boolean(val, default=False):
+    truthy = set(('t', 'T', 'true', 'True', 'TRUE', '1', 1, True))
+    falsy = set(('f', 'F', 'false', 'False', 'FALSE', '0', 0, False))
 
-    if txt:
-        with open("/etc/nginx/conf.d/gluu_https.conf", "w") as fd:
-            rendered_txt = txt % {
-                "gluu_domain": get_config("hostname", "localhost"),
-                "gluu_oxauth_backend": upstream_config(GLUU_OXAUTH_BACKEND.split(",")),
-                "gluu_oxtrust_backend": upstream_config(GLUU_OXTRUST_BACKEND.split(",")),
-            }
-            fd.write(rendered_txt)
+    if val in truthy:
+        return True
+    if val in falsy:
+        return False
+    return default
+
+
+def render_nginx_conf():
+    ctx = {
+        "gluu_domain": get_config("hostname", "localhost"),
+    }
+
+    if as_boolean(GLUU_OX_PROXY_MODE):
+        tmpl_fn = "/opt/templates/gluu_https.proxy.conf.tmpl"
+        ctx["gluu_oxauth_backend"] = GLUU_OXAUTH_BACKEND.split(",")[0]
+        ctx["gluu_oxtrust_backend"] = GLUU_OXTRUST_BACKEND.split(",")[0]
+        ctx["gluu_resolver"] = GLUU_RESOLVER_ADDR
+        ctx["oxauth_host_header"] = GLUU_OXAUTH_HOST_HEADER
+        ctx["oxtrust_host_header"] = GLUU_OXTRUST_HOST_HEADER
+    else:
+        tmpl_fn = "/opt/templates/gluu_https.upstream.conf.tmpl"
+        ctx["gluu_oxauth_backend"] = upstream_config(GLUU_OXAUTH_BACKEND.split(","))
+        ctx["gluu_oxtrust_backend"] = upstream_config(GLUU_OXTRUST_BACKEND.split(","))
+
+    with open(tmpl_fn) as fr:
+        txt = fr.read()
+
+        with open("/etc/nginx/conf.d/gluu_https.conf", "w") as fw:
+            fw.write(txt % ctx)
 
 
 def upstream_config(backends):
