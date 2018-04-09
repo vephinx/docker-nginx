@@ -5,12 +5,14 @@ import consulate
 
 GLUU_OXAUTH_BACKEND = os.environ.get("GLUU_OXAUTH_BACKEND", "localhost:8081")
 GLUU_OXTRUST_BACKEND = os.environ.get("GLUU_OXTRUST_BACKEND", "localhost:8082")
+GLUU_OXSHIBBOLETH_BACKEND = os.environ.get("GLUU_OXSHIBBOLETH_BACKEND", "localhost:8086")
 GLUU_KV_HOST = os.environ.get("GLUU_KV_HOST", "localhost")
 GLUU_KV_PORT = os.environ.get("GLUU_KV_PORT", 8500)
 
 GLUU_OX_PROXY_MODE = os.environ.get("GLUU_OX_PROXY_MODE", False)
 GLUU_OXAUTH_HOST_HEADER = os.environ.get("GLUU_OXAUTH_HOST_HEADER", "$host")
 GLUU_OXTRUST_HOST_HEADER = os.environ.get("GLUU_OXTRUST_HOST_HEADER", "$host")
+GLUU_OXSHIBBOLETH_HOST_HEADER = os.environ.get("GLUU_OXSHIBBOLETH_HOST_HEADER", "$host")
 GLUU_RESOLVER_ADDR = os.environ.get("GLUU_RESOLVER_ADDR", "127.0.0.11")
 
 consul = consulate.Consul(host=GLUU_KV_HOST, port=GLUU_KV_PORT)
@@ -67,13 +69,16 @@ def render_nginx_conf():
         tmpl_fn = "/opt/templates/gluu_https.proxy.conf.tmpl"
         ctx["gluu_oxauth_backend"] = GLUU_OXAUTH_BACKEND.split(",")[0]
         ctx["gluu_oxtrust_backend"] = GLUU_OXTRUST_BACKEND.split(",")[0]
+        ctx["gluu_oxshibboleth_backend"] = GLUU_OXSHIBBOLETH_BACKEND.split(",")[0]
         ctx["gluu_resolver"] = GLUU_RESOLVER_ADDR
         ctx["oxauth_host_header"] = GLUU_OXAUTH_HOST_HEADER
         ctx["oxtrust_host_header"] = GLUU_OXTRUST_HOST_HEADER
+        ctx["oxshibboleth_host_header"] = GLUU_OXSHIBBOLETH_HOST_HEADER
     else:
         tmpl_fn = "/opt/templates/gluu_https.upstream.conf.tmpl"
         ctx["gluu_oxauth_backend"] = upstream_config(GLUU_OXAUTH_BACKEND.split(","))
         ctx["gluu_oxtrust_backend"] = upstream_config(GLUU_OXTRUST_BACKEND.split(","))
+        ctx["gluu_oxshibboleth_backend"] = upstream_config(GLUU_OXSHIBBOLETH_BACKEND.split(","))
 
     with open(tmpl_fn) as fr:
         txt = fr.read()
