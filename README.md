@@ -10,7 +10,7 @@ Latest stable release is `gluufederation/nginx:3.1.2_dev`. See `CHANGES.md` for 
 
 This image uses its own versioning/tagging format.
 
-    <IMAGE-NAME>:<GLUU-SERVER-VERSION>_<INTERNAL-REV-VERSION>
+    <IMAGE-NAME>:<GLUU-SERVER-VERSION>_<BASELINE_DEV>
 
 For example, `gluufederation/nginx:3.1.2_dev` consists of:
 
