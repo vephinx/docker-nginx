@@ -10,7 +10,7 @@ GLUU_OXPASSPORT_BACKEND = os.environ.get("GLUU_OXPASSPORT_BACKEND", "localhost:8
 GLUU_KV_HOST = os.environ.get("GLUU_KV_HOST", "localhost")
 GLUU_KV_PORT = os.environ.get("GLUU_KV_PORT", 8500)
 
-GLUU_OX_PROXY_MODE = os.environ.get("GLUU_OX_PROXY_MODE", False)
+GLUU_PROXY_MODE = os.environ.get("GLUU_PROXY_MODE", "upstream")
 GLUU_OXAUTH_HOST_HEADER = os.environ.get("GLUU_OXAUTH_HOST_HEADER", "$host")
 GLUU_OXTRUST_HOST_HEADER = os.environ.get("GLUU_OXTRUST_HOST_HEADER", "$host")
 GLUU_OXSHIBBOLETH_HOST_HEADER = os.environ.get("GLUU_OXSHIBBOLETH_HOST_HEADER", "$host")
@@ -51,24 +51,13 @@ def render_ssl_key():
             fd.write(ssl_key)
 
 
-def as_boolean(val, default=False):
-    truthy = set(('t', 'T', 'true', 'True', 'TRUE', '1', 1, True))
-    falsy = set(('f', 'F', 'false', 'False', 'FALSE', '0', 0, False))
-
-    if val in truthy:
-        return True
-    if val in falsy:
-        return False
-    return default
-
-
 def render_nginx_conf():
     ctx = {
         "gluu_domain": get_config("hostname", "localhost"),
     }
 
-    if as_boolean(GLUU_OX_PROXY_MODE):
-        tmpl_fn = "/opt/templates/gluu_https.proxy.conf.tmpl"
+    if GLUU_PROXY_MODE == "resolver":
+        tmpl_fn = "/opt/templates/gluu_https.resolver.conf.tmpl"
         ctx["gluu_oxauth_backend"] = GLUU_OXAUTH_BACKEND.split(",")[0]
         ctx["gluu_oxtrust_backend"] = GLUU_OXTRUST_BACKEND.split(",")[0]
         ctx["gluu_oxshibboleth_backend"] = GLUU_OXSHIBBOLETH_BACKEND.split(",")[0]

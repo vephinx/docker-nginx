@@ -1,10 +1,9 @@
 server_tokens off;
 
-resolver %(gluu_resolver)s ipv6=off valid=10s;
+resolver %(gluu_resolver)s ipv6=off valid=60s;
 
 server {
-    listen 80 default_server;
-    listen [::]:80 default_server ipv6only=on;
+    listen 80;
     server_name %(gluu_domain)s;
     return 301 https://$server_name$request_uri;
 }
@@ -33,7 +32,7 @@ server {
 
     location /oxauth {
         set $oxauth_backend %(gluu_oxauth_backend)s;
-        proxy_pass http://$oxauth_backend/oxauth;
+        proxy_pass http://$oxauth_backend$request_uri;
         proxy_set_header Host %(oxauth_host_header)s;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Host $host:$server_port;
@@ -99,7 +98,7 @@ server {
 
     location /identity {
         set $oxtrust_backend %(gluu_oxtrust_backend)s;
-        proxy_pass http://$oxtrust_backend/identity;
+        proxy_pass http://$oxtrust_backend$request_uri;
         proxy_set_header Host %(oxtrust_host_header)s;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Host $host:$server_port;
@@ -121,7 +120,7 @@ server {
 
     location /idp {
         set $oxshibboleth_backend %(gluu_oxshibboleth_backend)s;
-        proxy_pass http://$oxshibboleth_backend/idp;
+        proxy_pass http://$oxshibboleth_backend$request_uri;
         proxy_set_header Host %(oxshibboleth_host_header)s;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Host $host:$server_port;
@@ -132,7 +131,7 @@ server {
 
     location /passport {
         set $oxpassport_backend %(gluu_oxpassport_backend)s;
-        proxy_pass http://$oxpassport_backend/passport;
+        proxy_pass http://$oxpassport_backend$request_uri;
         proxy_set_header Host %(oxpassport_host_header)s;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Host $host:$server_port;
