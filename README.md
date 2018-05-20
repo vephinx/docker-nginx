@@ -4,7 +4,7 @@ A docker image version of nginx.
 
 ## Latest Stable Release
 
-Latest stable release is `gluufederation/nginx:3.1.2_dev`. See `CHANGES.md` for archives.
+Latest stable release is `gluufederation/nginx:3.1.3_dev`. See `CHANGES.md` for archives.
 
 ## Versioning/Tagging
 
@@ -12,17 +12,17 @@ This image uses its own versioning/tagging format.
 
     <IMAGE-NAME>:<GLUU-SERVER-VERSION>_<BASELINE_DEV>
 
-For example, `gluufederation/nginx:3.1.2_dev` consists of:
+For example, `gluufederation/nginx:3.1.3_dev` consists of:
 
 - `glufederation/nginx` as `<IMAGE_NAME>`; the actual image name
-- `3.1.2` as `GLUU-SERVER-VERSION`; the Gluu Server version as setup reference
+- `3.1.3` as `GLUU-SERVER-VERSION`; the Gluu Server version as setup reference
 - `_dev` as `<BASELINE_DEV>`; used until official production release
 
 ## Installation
 
 Pull the image:
 
-    docker pull gluufederation/nginx:3.1.2_dev
+    docker pull gluufederation/nginx:3.1.3_dev
 
 ## Environment Variables
 
@@ -46,5 +46,5 @@ docker run -d \
     -e GLUU_KV_PORT=8500 \
     -e GLUU_OXAUTH_BACKEND=oxauth.example.com:8081 \
     -e GLUU_OXTRUST_BACKEND=oxtrust.example.com:8082 \
-    gluufederation/nginx:3.1.2_dev
+    gluufederation/nginx:3.1.3_dev
 ```
