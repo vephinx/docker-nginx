@@ -2,23 +2,10 @@ import os
 
 import consulate
 
-
-GLUU_OXAUTH_BACKEND = os.environ.get("GLUU_OXAUTH_BACKEND", "localhost:8081")
-GLUU_OXTRUST_BACKEND = os.environ.get("GLUU_OXTRUST_BACKEND", "localhost:8082")
-GLUU_OXSHIBBOLETH_BACKEND = os.environ.get("GLUU_OXSHIBBOLETH_BACKEND", "localhost:8086")
-GLUU_OXPASSPORT_BACKEND = os.environ.get("GLUU_OXPASSPORT_BACKEND", "localhost:8090")
 GLUU_KV_HOST = os.environ.get("GLUU_KV_HOST", "localhost")
 GLUU_KV_PORT = os.environ.get("GLUU_KV_PORT", 8500)
 
-GLUU_PROXY_MODE = os.environ.get("GLUU_PROXY_MODE", "upstream")
-GLUU_OXAUTH_HOST_HEADER = os.environ.get("GLUU_OXAUTH_HOST_HEADER", "$host")
-GLUU_OXTRUST_HOST_HEADER = os.environ.get("GLUU_OXTRUST_HOST_HEADER", "$host")
-GLUU_OXSHIBBOLETH_HOST_HEADER = os.environ.get("GLUU_OXSHIBBOLETH_HOST_HEADER", "$host")
-GLUU_OXPASSPORT_HOST_HEADER = os.environ.get("GLUU_OXPASSPORT_HOST_HEADER", "$host")
-GLUU_RESOLVER_ADDR = os.environ.get("GLUU_RESOLVER_ADDR", "127.0.0.11")
-
 consul = consulate.Consul(host=GLUU_KV_HOST, port=GLUU_KV_PORT)
-
 
 CONFIG_PREFIX = "gluu/config/"
 
@@ -51,45 +38,6 @@ def render_ssl_key():
             fd.write(ssl_key)
 
 
-def render_nginx_conf():
-    ctx = {
-        "gluu_domain": get_config("hostname", "localhost"),
-    }
-
-    if GLUU_PROXY_MODE == "resolver":
-        tmpl_fn = "/opt/templates/gluu_https.resolver.conf.tmpl"
-        ctx["gluu_oxauth_backend"] = GLUU_OXAUTH_BACKEND.split(",")[0]
-        ctx["gluu_oxtrust_backend"] = GLUU_OXTRUST_BACKEND.split(",")[0]
-        ctx["gluu_oxshibboleth_backend"] = GLUU_OXSHIBBOLETH_BACKEND.split(",")[0]
-        ctx["gluu_oxpassport_backend"] = GLUU_OXPASSPORT_BACKEND.split(",")[0]
-        ctx["gluu_resolver"] = GLUU_RESOLVER_ADDR
-        ctx["oxauth_host_header"] = GLUU_OXAUTH_HOST_HEADER
-        ctx["oxtrust_host_header"] = GLUU_OXTRUST_HOST_HEADER
-        ctx["oxshibboleth_host_header"] = GLUU_OXSHIBBOLETH_HOST_HEADER
-        ctx["oxpassport_host_header"] = GLUU_OXPASSPORT_HOST_HEADER
-    else:
-        tmpl_fn = "/opt/templates/gluu_https.upstream.conf.tmpl"
-        ctx["gluu_oxauth_backend"] = upstream_config(GLUU_OXAUTH_BACKEND.split(","))
-        ctx["gluu_oxtrust_backend"] = upstream_config(GLUU_OXTRUST_BACKEND.split(","))
-        ctx["gluu_oxshibboleth_backend"] = upstream_config(GLUU_OXSHIBBOLETH_BACKEND.split(","))
-        ctx["gluu_oxpassport_backend"] = upstream_config(GLUU_OXPASSPORT_BACKEND.split(","))
-
-    with open(tmpl_fn) as fr:
-        txt = fr.read()
-
-        with open("/etc/nginx/conf.d/gluu_https.conf", "w") as fw:
-            fw.write(txt % ctx)
-
-
-def upstream_config(backends):
-    cfg = "".join([
-        "\tserver {} fail_timeout=10s;\n".format(backend)
-        for backend in backends
-    ])
-    return cfg
-
-
 if __name__ == "__main__":
     render_ssl_cert()
     render_ssl_key()
-    render_nginx_conf()

@@ -1,0 +1,12 @@
+[template]
+prefix = "/gluu"
+src = "gluu_https.conf.tmpl"
+dest = "/etc/nginx/conf.d/default.conf"
+keys = [
+    "/services/oxauth",
+    "/services/oxtrust",
+    "/services/oxshibboleth",
+    "/services/oxpassport",
+    "/config/hostname"
+]
+reload_cmd = "nginx -s reload"
