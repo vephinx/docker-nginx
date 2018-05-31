@@ -46,7 +46,7 @@ ENV GLUU_KV_HOST localhost
 ENV GLUU_KV_PORT 8500
 
 RUN mkdir -p /opt/scripts /opt/templates
-COPY templates/consul-template/gluu_https.conf.ctmpl /opt/templates/
+COPY templates/gluu_https.conf.ctmpl /opt/templates/
 COPY scripts /opt/scripts/
 
 RUN chmod +x /opt/scripts/entrypoint.sh

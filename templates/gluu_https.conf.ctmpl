@@ -1,8 +1,8 @@
 server_tokens off;
 
 upstream oxauth_backend {
-    {{ range service "oxauth|passing" }}
-        server {{ .Address }}:{{ .Port }};
+    {{range service "oxauth|passing"}}
+        server {{.Address}}:{{.Port}};
     {{else}}
         server localhost:8081;
     {{end}}
@@ -56,7 +56,7 @@ server {
     #add_header X-Frame-Options SAMEORIGIN always;
     add_header X-Xss-Protection "1; mode=block" always;
     add_header X-Content-Type-Options nosniff always;
-    # add_header Content-Security-Policy 'default-src "self" "unsafe-inline" {{key "/gluu/config/hostname"}}' always;
+    #add_header Content-Security-Policy 'default-src "self" "unsafe-inline" {{key "/gluu/config/hostname"}}' always;
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
 
     location / {
