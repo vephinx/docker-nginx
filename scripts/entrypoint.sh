@@ -6,9 +6,11 @@ if [ ! -f /touched ]; then
     python /opt/scripts/entrypoint.py
 fi
 
-nginx &
-exec confd \
-    -interval $GLUU_CONFD_INTERVAL \
-    -log-level $GLUU_CONFD_LOG_LEVEL \
-    -backend $GLUU_CONFD_BACKEND \
-    -node $GLUU_KV_HOST:$GLUU_KV_PORT
+exec consul-template \
+    -log-level info \
+    -consul-addr $GLUU_KV_HOST:$GLUU_KV_PORT \
+    -template "/opt/templates/gluu_https.conf.ctmpl:/etc/nginx/conf.d/default.conf" \
+    -wait 5s \
+    -exec "nginx" \
+    -exec-reload-signal SIGHUP \
+    -exec-kill-signal SIGQUIT

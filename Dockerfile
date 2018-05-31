@@ -27,12 +27,15 @@ EXPOSE 443
 RUN pip install -U pip \
     && pip install "consulate==0.6.0"
 
-# =====
-# confd
-# =====
-ENV CONFD_VERSION 0.16.0
-RUN wget -q https://github.com/kelseyhightower/confd/releases/download/v${CONFD_VERSION}/confd-${CONFD_VERSION}-linux-amd64 -O /usr/bin/confd \
-    && chmod +x /usr/bin/confd
+# ===============
+# consul-template
+# ===============
+ENV CONSUL_TEMPLATE_VERSION 0.19.4
+
+RUN wget -q https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.tgz -O /tmp/consul-template.tgz \
+    && tar xf /tmp/consul-template.tgz -C /usr/bin/ \
+    && chmod +x /usr/bin/consul-template \
+    && rm /tmp/consul-template.tgz
 
 # ==========
 # misc stuff
@@ -41,13 +44,9 @@ LABEL vendor="Gluu Federation"
 
 ENV GLUU_KV_HOST localhost
 ENV GLUU_KV_PORT 8500
-ENV GLUU_CONFD_INTERVAL 30
-ENV GLUU_CONFD_LOG_LEVEL info
-ENV GLUU_CONFD_BACKEND consul
 
-RUN mkdir -p /opt/scripts /etc/confd/conf.d/ /etc/confd/templates
-COPY templates/confd/gluu_https.conf.tmpl /etc/confd/templates/
-COPY templates/confd/gluu_https.toml /etc/confd/conf.d/
+RUN mkdir -p /opt/scripts /opt/templates
+COPY templates/consul-template/gluu_https.conf.ctmpl /opt/templates/
 COPY scripts /opt/scripts/
 
 RUN chmod +x /opt/scripts/entrypoint.sh
