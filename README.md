@@ -28,10 +28,6 @@ Pull the image:
 
 - `GLUU_KV_HOST`: hostname or IP address of Consul.
 - `GLUU_KV_PORT`: port of Consul.
-- `GLUU_OXAUTH_BACKEND`: Host and port of oxAuth backend, i.e. `oxauth.example.com:8081`. Multiple backends is supported (separate each backend with comma character, i.e. `oxauth1.example.com:8081,oxauth2.example.com:8081`).
-- `GLUU_OXTRUST_BACKEND`: Host and port of oxTrust backend, i.e. `oxtrust.example.com:8082`. Multiple backends is supported (separate each backend with comma character, i.e. `oxtrust1.example.com:8082,oxtrust2.example.com:8082`).
-- `GLUU_OXSHIBBOLETH_BACKEND`: Host and port of oxTrust backend, i.e. `oxtrust.example.com:8086`.
-- `GLUU_OXPASSPORT_BACKEND`: Host and port of oxTrust backend, i.e. `oxtrust.example.com:8090`.
 
 > Note that you can use IP addresses in lieu of FQDN's
 
@@ -44,7 +40,5 @@ docker run -d \
     --name nginx \
     -e GLUU_KV_HOST=consul.example.com \
     -e GLUU_KV_PORT=8500 \
-    -e GLUU_OXAUTH_BACKEND=oxauth.example.com:8081 \
-    -e GLUU_OXTRUST_BACKEND=oxtrust.example.com:8082 \
     gluufederation/nginx:3.1.3_dev
 ```
