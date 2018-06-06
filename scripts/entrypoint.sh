@@ -1,18 +1,16 @@
-#!/bin/bash
+#!/bin/sh
 set -e
-
-enable_gluu_https() {
-    if [ -f /etc/nginx/sites-available/gluu_https.conf ]; then
-        ln -sf /etc/nginx/sites-available/gluu_https.conf /etc/nginx/sites-enabled/gluu_https.conf
-        rm /etc/nginx/sites-enabled/default
-    fi
-
-}
 
 if [ ! -f /touched ]; then
     touch /touched
     python /opt/scripts/entrypoint.py
-    enable_gluu_https
 fi
 
-exec gosu root /usr/sbin/nginx -g "daemon off;"
+exec consul-template \
+    -log-level info \
+    -consul-addr $GLUU_KV_HOST:$GLUU_KV_PORT \
+    -template "/opt/templates/gluu_https.conf.ctmpl:/etc/nginx/conf.d/default.conf" \
+    -wait 5s \
+    -exec "nginx" \
+    -exec-reload-signal SIGHUP \
+    -exec-kill-signal SIGQUIT
