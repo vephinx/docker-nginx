@@ -24,8 +24,9 @@ EXPOSE 443
 # ======
 # Python
 # ======
+COPY requirements.txt /tmp/
 RUN pip install -U pip \
-    && pip install "consulate==0.6.0"
+    && pip install -r /tmp/requirements.txt --no-cache-dir
 
 # ===============
 # consul-template
@@ -42,8 +43,9 @@ RUN wget -q https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VER
 # ==========
 LABEL vendor="Gluu Federation"
 
-ENV GLUU_KV_HOST localhost
-ENV GLUU_KV_PORT 8500
+ENV GLUU_CONFIG_ADAPTER consul
+ENV GLUU_CONSUL_HOST localhost
+ENV GLUU_CONSUL_PORT 8500
 
 RUN mkdir -p /opt/scripts /opt/templates
 COPY templates/gluu_https.conf.ctmpl /opt/templates/
