@@ -2,9 +2,10 @@ FROM registry.access.redhat.com/rhel7-minimal
 
 LABEL maintainer="Gluu Inc. <support@gluu.org>"
 
-# ===============
-# Alpine packages
-# ===============
+# =============
+# RHEL packages
+# =============
+COPY repo/nginx.repo /etc/yum.repos.d/nginx.repo
 RUN microdnf --enablerepo=rhel-server-rhscl-7-rpms --enablerepo=rhel-7-server-rpms install \
     python27-python-pip openssl wget unzip tar gzip nginx \
     && microdnf update \
