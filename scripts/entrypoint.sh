@@ -7,8 +7,12 @@ if [ "$GLUU_CONFIG_ADAPTER" != "consul" ]; then
 fi
 
 if [ ! -f /touched ]; then
+    if [ -f /etc/redhat-release ]; then
+        source scl_source enable python27 && python /opt/scripts/entrypoint.py
+    else
+        python /opt/scripts/entrypoint.py
+    fi
     touch /touched
-    python /opt/scripts/entrypoint.py
 fi
 
 exec consul-template \
