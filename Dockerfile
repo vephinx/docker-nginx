@@ -38,6 +38,14 @@ RUN wget -q https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VER
     && chmod +x /usr/bin/consul-template \
     && rm /tmp/consul-template.tgz
 
+# ====
+# Tini
+# ====
+
+ENV TINI_VERSION v0.18.0
+RUN wget -q https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static -O /usr/bin/tini \
+    && chmod +x /usr/bin/tini
+
 # ==========
 # misc stuff
 # ==========
@@ -52,4 +60,5 @@ COPY templates/gluu_https.conf.ctmpl /opt/templates/
 COPY scripts /opt/scripts/
 
 RUN chmod +x /opt/scripts/entrypoint.sh
+ENTRYPOINT ["tini", "--"]
 CMD ["/opt/scripts/wait-for-it", "/opt/scripts/entrypoint.sh"]
