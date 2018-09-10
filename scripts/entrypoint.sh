@@ -18,26 +18,26 @@ get_consul_opts() {
 
     if [ $GLUU_CONSUL_SCHEME = "https" ]; then
         consul_opts="${consul_opts} -consul-ssl"
-    fi
 
-    if [ -f $GLUU_CONSUL_CACERT_FILE ]; then
-        consul_opts="${consul_opts} -consul-ssl-ca-cert $GLUU_CONSUL_CACERT_FILE"
-    fi
+        if [ -f $GLUU_CONSUL_CACERT_FILE ]; then
+            consul_opts="${consul_opts} -consul-ssl-ca-cert $GLUU_CONSUL_CACERT_FILE"
+        fi
 
-    if [ -f $GLUU_CONSUL_CERT_FILE ]; then
-        consul_opts="${consul_opts} -consul-ssl-cert $GLUU_CONSUL_CERT_FILE"
-    fi
+        if [ -f $GLUU_CONSUL_CERT_FILE ]; then
+            consul_opts="${consul_opts} -consul-ssl-cert $GLUU_CONSUL_CERT_FILE"
+        fi
 
-    if [ -f $GLUU_CONSUL_KEY_FILE ]; then
-        consul_opts="${consul_opts} -consul-ssl-key $GLUU_CONSUL_KEY_FILE"
+        if [ -f $GLUU_CONSUL_KEY_FILE ]; then
+            consul_opts="${consul_opts} -consul-ssl-key $GLUU_CONSUL_KEY_FILE"
+        fi
+
+        if [ $GLUU_CONSUL_VERIFY = "true" ]; then
+            consul_opts="${consul_opts} -consul-ssl-verify"
+        fi
     fi
 
     if [ -f $GLUU_CONSUL_TOKEN_FILE ]; then
         consul_opts="${consul_opts} -consul-token $(cat $GLUU_CONSUL_TOKEN_FILE)"
-    fi
-
-    if [ $GLUU_CONSUL_VERIFY = "true" ]; then
-        consul_opts="${consul_opts} -consul-ssl-verify"
     fi
     echo $consul_opts
 }
