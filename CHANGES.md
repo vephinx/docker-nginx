@@ -2,6 +2,12 @@
 
 Here you can see an overview of changes between each release.
 
+## Version 3.1.3_05
+
+Released on September 15th, 2018.
+
+* Disable IPv6 support.
+
 ## Version 3.1.3_04
 
 Released on September 12th, 2018.
