@@ -2,6 +2,13 @@
 
 Here you can see an overview of changes between each release.
 
+## Version 3.1.3_07
+
+Released on September 27th, 2018.
+
+* Removed deprecated `ssl on` directive.
+* Removed unsecure SSL protocol TLSv1.
+
 ## Version 3.1.3_06
 
 Released on September 18th, 2018.
