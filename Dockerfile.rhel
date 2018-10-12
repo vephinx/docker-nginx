@@ -7,7 +7,7 @@ LABEL maintainer="Gluu Inc. <support@gluu.org>"
 # =============
 COPY repo/nginx.repo /etc/yum.repos.d/nginx.repo
 RUN microdnf --enablerepo=rhel-server-rhscl-7-rpms --enablerepo=rhel-7-server-rpms install \
-    python27-python-pip openssl wget unzip tar gzip nginx \
+    python27-python-pip openssl wget unzip tar gzip nginx net-tools bind-utils iputils \
     && microdnf update \
     && microdnf clean all
 
